@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp1"
         mc:Ignorable="d"
-        Title="Snake!" Height="422" Width="642" ResizeMode="NoResize">
-    <Grid Background="Black">
+        Title="Snake!" Height="422" Width="923.054" ResizeMode="NoResize">
+    <Grid Background="LightGray">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="*"/>
@@ -16,5 +16,6 @@
                 Grid.Column="1" HorizontalAlignment="Stretch" MaxWidth="642" MaxHeight="422">
             <Label x:Name="label" Canvas.Left="50" Canvas.Top="76"/>
         </Canvas>
+        <ListBox x:Name="listBox" Height="330" Canvas.Left="-116" Canvas.Top="22" Width="103" Grid.ColumnSpan="2" Margin="10,32,804,31" IsEnabled="False"/>
     </Grid>
 </Window>

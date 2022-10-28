@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,6 +27,7 @@ namespace WpfApp1
 
         // This list describes the body of the snake on the Canvas
         private List<Point> snakePoints = new List<Point>();
+        private List<int> scores = new List<int>();
 
 
 
@@ -66,14 +68,15 @@ namespace WpfApp1
         private int headSize = (int)SIZE.THICK;
 
 
+        public  DispatcherTimer timer = new DispatcherTimer();
 
-        private int length = 100;
+        public int length = 100;
         private int score = 0;
         private Random rnd = new Random();
         public MainWindow()
         {
+           
             InitializeComponent();
-            DispatcherTimer timer = new DispatcherTimer();
             timer.Tick += new EventHandler(timer_Tick);
 
             /* Here user can change the speed of the snake.
@@ -135,8 +138,8 @@ namespace WpfApp1
             if ((currentPosition.X < 5) || (currentPosition.X > 620) ||
        (currentPosition.Y < 5) || (currentPosition.Y > 380))
                 GameOver();
-            // NOT YET IMPLEMENTED
-            int tyhja = 0;
+            
+            
             // Hitting a bonus Point causes the lengthen-Snake Effect
             int n = 0;
             foreach (Point point in bonusPoints)
@@ -147,7 +150,7 @@ namespace WpfApp1
                 {
                     length += 10;
                     score += 10;
-                    label.Content = score + tyhja;
+                    
                    
                     // In the case of food consumption, erase the food object
                     // from the list of bonuses as well as from the canvas
@@ -197,6 +200,7 @@ namespace WpfApp1
             previousDirection = direction;
 
         }
+        public int count;
         //
         private void paintSnake(Point currentposition)
         {
@@ -204,7 +208,7 @@ namespace WpfApp1
             /* This method is used to paint a frame of the snake´s body
              * each time it is called. */
 
-            Ellipse newEllipse = new Ellipse();
+          Ellipse newEllipse = new Ellipse();
             newEllipse.Fill = snakeColor;
             newEllipse.Width = headSize;
             newEllipse.Height = headSize;
@@ -212,7 +216,7 @@ namespace WpfApp1
             Canvas.SetTop(newEllipse, currentposition.Y);
             Canvas.SetLeft(newEllipse, currentposition.X);
 
-            int count = paintCanvas.Children.Count;
+            count = paintCanvas.Children.Count;
             paintCanvas.Children.Add(newEllipse);
             snakePoints.Add(currentposition);
 
@@ -226,8 +230,31 @@ namespace WpfApp1
         //
         private void GameOver()
         {
-            MessageBox.Show("You Lose! Your score is " + score.ToString(), "Game Over", MessageBoxButton.OK, MessageBoxImage.Hand);
-            this.Close();
+            
+            timer.Stop();
+            MessageBox.Show($"Kuolit pisteillä {score.ToString()}");
+            paintCanvas.Children.Clear();
+            snakePoints.Clear();
+            snakePoints.Add(startingPoint);
+            paintSnake(startingPoint);
+            currentPosition = startingPoint;
+            scores.Add(score);
+            scores.Sort();
+            listBox.Items.Add(scores);
+            int tyhja = 0;
+            listBox.Items.Add(tyhja + score);
+            bonusPoints.Clear();
+            length = 100;
+            score = 0;
+            for (int n = 0; n < 10; n++)
+            {
+                paintBonus(n);
+            }
+            timer.Start();
+            
+            //listBox.Items.SortDescriptions.Add(
+        //new SortDescription("Content", ListSortDirection.Descending));
+            
         }
     }
 }
