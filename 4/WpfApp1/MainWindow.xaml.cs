@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +18,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
+
+
 namespace WpfApp1
 {
     /// <summary>
@@ -27,10 +32,6 @@ namespace WpfApp1
 
         // This list describes the body of the snake on the Canvas
         private List<Point> snakePoints = new List<Point>();
-        private List<int> scores = new List<int>();
-
-
-
         private Brush snakeColor = Brushes.Green;
         private enum SIZE
         {
@@ -71,7 +72,7 @@ namespace WpfApp1
         public  DispatcherTimer timer = new DispatcherTimer();
 
         public int length = 100;
-        private int score = 0;
+        public int score = 0;
         private Random rnd = new Random();
         public MainWindow()
         {
@@ -227,6 +228,12 @@ namespace WpfApp1
                 snakePoints.RemoveAt(count - length);
             }
         }
+        public class pisteet
+        {
+       
+            public int pisteesi { get; set; }
+
+        }
         //
         private void GameOver()
         {
@@ -238,11 +245,42 @@ namespace WpfApp1
             snakePoints.Add(startingPoint);
             paintSnake(startingPoint);
             currentPosition = startingPoint;
+            
+
+            var pisteemme = new pisteet
+            {
+                pisteesi = score
+
+            };
+            
+            string json = JsonConvert.SerializeObject(pisteemme);
+            listBox.Items.Add(json.ToString());
+            
+
+
+            /*Console.WriteLine(File.ReadAllText(fileName));
+             * GFG gg = new GFG();
             scores.Add(score);
             scores.Sort();
-            listBox.Items.Add(scores);
-            int tyhja = 0;
-            listBox.Items.Add(tyhja + score);
+            scores.Reverse();
+            foreach (int g in scores)
+            {
+
+                listBox.Items.Add(g);
+            }
+             * list1.Sort(gg);
+
+            foreach (int g in list1)
+            {
+
+                // Display sorted list
+                Console.WriteLine(g);
+
+            }
+            listBox.Items.Add(scores.ToString());
+            */
+
+
             bonusPoints.Clear();
             length = 100;
             score = 0;
@@ -256,5 +294,8 @@ namespace WpfApp1
         //new SortDescription("Content", ListSortDirection.Descending));
             
         }
+           
+        }
+
     }
-}
+
